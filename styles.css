@@ -36,7 +36,7 @@ h1 {
   gap: 8px;
   justify-content: flex-start;   /* align left, user scrolls */
   margin: 0 auto 15px auto;
-  max-width: 500px;              /* align with cards */
+  max-width: 800px;              /* align with cards */
   width: calc(100% - 40px);      /* ~20px side padding */
 
   overflow-x: auto;              /* enable horizontal scroll */
@@ -48,15 +48,17 @@ h1 {
   display: none;                 /* hide scrollbar in Chrome/Safari */
 }
 
+/* Tabs (day selection) */
 .tabs button {
-  flex: 0 0 auto;                /* prevent shrinking */
-  min-width: 90px;
-  padding: 12px;
+  flex: 0 0 auto;
+  min-width: 110px;   /* increased from 90px */
+  padding: 14px;      /* more breathing space */
   border: none;
-  border-radius: 8px;
+  border-radius: 10px; /* slightly rounder */
   background: var(--card-background);
   color: var(--menu-color);
-  font-size: 1rem;
+  font-size: 1.05rem; /* a touch larger */
+  font-weight: 500;   /* medium weight for nicer look */
   cursor: pointer;
   transition: background 0.2s ease, transform 0.1s ease;
 }
@@ -74,26 +76,32 @@ h1 {
 
 /* Meal cards */
 .meal {
-  margin: 12px auto;              /* vertical spacing + center horizontally */
-  padding: 15px;
-  border-radius: 10px;
+  margin: 15px auto;
+  padding: 18px 20px;   /* more horizontal padding */
+  border-radius: 12px;  /* slightly larger corners */
   background: var(--card-background);
   text-align: left;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.35);
   color: var(--menu-color);
 
-  max-width: 500px;               /* keeps them from going edge-to-edge */
-  width: calc(100% - 40px);       /* leaves ~20px gap on both sides on mobile */
+  max-width: 800px;     /* increased from 500px */
+  width: calc(100% - 30px); /* less side gap, wider card */
+  font-size: 1.05rem;   /* base font bigger */
+  line-height: 1.5;     /* easier reading */
+  font-family: 'Fira Sans', Arial, sans-serif;
+  font-weight: 400;
 }
 
-
+/* Meal headings inside cards */
 .meal span {
   display: block;
-  font-weight: bold;
-  margin-bottom: 6px;
+  font-weight: 600;        /* semi-bold for clarity */
+  margin-bottom: 8px;
   color: var(--canteen-color);
-  font-size: 1.1rem;
+  font-size: 1.2rem;       /* larger than text */
+  letter-spacing: 0.5px;   /* nice spacing */
 }
+
 
 /* Swipe view (optional mobile UX) */
 .swipe-view {
