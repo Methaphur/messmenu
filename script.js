@@ -7,27 +7,28 @@ async function fetchMenu() {
   try {
     const response = await fetch(csvUrl);
     const csvText = await response.text();
-    const rows = csvText.split("\n").map(r => r.split(","));
-    
-    // Assuming: Timestamp, Day, Breakfast, Lunch, Dinner in sheet
-    const headers = rows[0];
-    const dataRows = rows.slice(1).filter(r => r.length >= 5);
+    const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+    const dataRows = parsed.data;
 
     if (dataRows.length === 0) return;
 
-    // Take the first row's timestamp
-    const firstTimestamp = new Date(dataRows[0][0]);
+    // Take the first row's timestamp from "Column 1"
+    const firstTimestamp = new Date(dataRows[0]["Column 1"]);
     const weekRange = getWeekRange(firstTimestamp);
     document.getElementById("week-title").textContent = `${weekRange.start} - ${weekRange.end} Mess Menu`;
 
     // Build menuData sorted by daysOrder
     dataRows.forEach(row => {
-      const [timestamp, day, breakfast, lunch, dinner] = row.map(x => x.trim());
+      const day = row["Column 2"]?.trim();
       if (!day || !daysOrder.includes(day)) return;
-      menuData[day] = { breakfast, lunch, dinner };
+      menuData[day] = {
+        breakfast: row["Column 3"]?.trim(),
+        lunch: row["Column 4"]?.trim(),
+        // snacks: row["Column 5"]?.trim(),
+        dinner: row["Column 6"]?.trim()
+      };
     });
 
-    // Render Sunday → Saturday in order
     renderTabs();
     renderMenu("Sunday");
   } catch (err) {
@@ -58,6 +59,9 @@ function renderTabs() {
   const tabsContainer = document.querySelector(".tabs");
   tabsContainer.innerHTML = "";
 
+  let today = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+  let defaultDay = daysOrder[today];
+
   daysOrder.forEach(day => {
     if (menuData[day]) {
       const btn = document.createElement("button");
@@ -68,12 +72,23 @@ function renderTabs() {
         renderMenu(day);
       };
       tabsContainer.appendChild(btn);
+
+      // If this is today’s tab, make it active
+      if (day === defaultDay) {
+        btn.classList.add("active");
+      }
     }
   });
 
-  // Mark Sunday as default
-  if (tabsContainer.firstChild) {
-    tabsContainer.firstChild.classList.add("active");
+  // Render today’s menu if available, otherwise fall back to Sunday
+  if (menuData[defaultDay]) {
+    renderMenu(defaultDay);
+  } else {
+    const firstAvailableDay = Object.keys(menuData)[0];
+    if (firstAvailableDay) {
+      tabsContainer.querySelector("button").classList.add("active");
+      renderMenu(firstAvailableDay);
+    }
   }
 }
 
@@ -91,3 +106,4 @@ function renderMenu(day) {
 }
 
 fetchMenu();
+
