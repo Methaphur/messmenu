@@ -15,7 +15,7 @@ async function fetchMenu() {
     // Take the first row's timestamp from "Column 1"
     const firstTimestamp = new Date(dataRows[0]["Column 1"]);
     const weekRange = getWeekRange(firstTimestamp);
-    document.getElementById("week-title").textContent = `${weekRange.start} - ${weekRange.end} Mess Menu`;
+    document.getElementById("week-title").textContent = `${weekRange.start} - ${weekRange.end}`;
 
     // Build menuData sorted by daysOrder
     dataRows.forEach(row => {
