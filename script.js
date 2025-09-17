@@ -13,19 +13,19 @@ async function fetchMenu() {
     if (dataRows.length === 0) return;
 
     // Take the first row's timestamp from "Column 1"
-    const firstTimestamp = new Date(dataRows[0]["Column 1"]);
+    const firstTimestamp = parseTimestamp(dataRows[0]["Timestamp"]);
     const weekRange = getWeekRange(firstTimestamp);
     document.getElementById("week-title").textContent = `${weekRange.start} - ${weekRange.end}`;
 
     // Build menuData sorted by daysOrder
     dataRows.forEach(row => {
-      const day = row["Column 2"]?.trim();
+      const day = row["Day"]?.trim();
       if (!day || !daysOrder.includes(day)) return;
       menuData[day] = {
-        breakfast: row["Column 3"]?.trim(),
-        lunch: row["Column 4"]?.trim(),
-        // snacks: row["Column 5"]?.trim(),
-        dinner: row["Column 6"]?.trim()
+        breakfast: row["Breakfast"]?.trim(),
+        lunch: row["Lunch"]?.trim(),
+        // snacks: row["Snacks"]?.trim(),
+        dinner: row["Dinner"]?.trim()
       };
     });
 
@@ -34,6 +34,16 @@ async function fetchMenu() {
     console.error("Error fetching menu:", err);
   }
 }
+
+function parseTimestamp(ts) {
+  // Example: "9/17/2025 9:43:24"
+  const [datePart, timePart] = ts.split(" ");
+  const [month, day, year] = datePart.split("/").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+
+  return new Date(year, month - 1, day, hour, minute, second || 0);
+}
+
 
 function getWeekRange(date) {
   const day = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
