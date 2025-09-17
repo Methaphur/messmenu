@@ -30,23 +30,25 @@ async function fetchMenu() {
     });
 
     renderTabs();
-    renderMenu("Sunday");
   } catch (err) {
     console.error("Error fetching menu:", err);
   }
 }
 
 function getWeekRange(date) {
-  const day = date.getDay(); // 0 = Sunday
-  const sunday = new Date(date);
-  sunday.setDate(date.getDate() - day);
+  const day = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 
-  const saturday = new Date(sunday);
-  saturday.setDate(sunday.getDate() + 6);
+  // Find Monday of this week
+  const monday = new Date(date);
+  const diffToMonday = (day + 6) % 7; // turns Sunday(0) → 6, Monday(1) → 0, etc.
+  monday.setDate(date.getDate() - diffToMonday);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
 
   return {
-    start: formatDate(sunday),
-    end: formatDate(saturday)
+    start: formatDate(monday),
+    end: formatDate(sunday)
   };
 }
 
@@ -55,12 +57,18 @@ function formatDate(date) {
   return date.toLocaleDateString(undefined, options);
 }
 
+function getTodayName() {
+  const jsDay = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  // convert to Monday=0 ... Sunday=6
+  const mondayFirstIndex = (jsDay + 6) % 7;
+  return daysOrder[mondayFirstIndex];
+}
+
 function renderTabs() {
   const tabsContainer = document.querySelector(".tabs");
   tabsContainer.innerHTML = "";
 
-  let today = new Date().getDay(); // 0 = Sunday, 6 = Saturday
-  let defaultDay = daysOrder[today];
+  let defaultDay = getTodayName();
 
   daysOrder.forEach(day => {
     if (menuData[day]) {
@@ -106,4 +114,3 @@ function renderMenu(day) {
 }
 
 fetchMenu();
-
