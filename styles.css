@@ -1,0 +1,161 @@
+/* Reset + normalize (already included by you) */
+/* Keeping only relevant additions below */
+
+/* Theme colors */
+html {
+  --main-background-color: #2d2e47;
+  --card-background: #282a36;
+  --canteen-color: #ff79c6;
+  --text-color: #ff79c6;
+  --timestamp-color: #6272a4;
+  --menu-color: #f8f8f2;
+  --footer-color: #ff79c6;
+}
+
+body {
+  background: var(--main-background-color);
+  min-height: 100vh;
+  margin: 0;
+  padding: 15px;
+  font-family: 'Fira Sans', Arial, sans-serif;
+  color: var(--text-color);
+  text-align: center;
+}
+
+/* Heading */
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: var(--canteen-color);
+}
+
+/* Tabs (day selection) */
+.tabs {
+  display: flex;
+  flex-wrap: nowrap;             /* keep in one row */
+  gap: 8px;
+  justify-content: flex-start;   /* align left, user scrolls */
+  margin: 0 auto 15px auto;
+  max-width: 800px;              /* align with cards */
+  width: calc(100% - 40px);      /* ~20px side padding */
+
+  overflow-x: auto;              /* enable horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  scrollbar-width: none;         /* hide scrollbar in Firefox */
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;                 /* hide scrollbar in Chrome/Safari */
+}
+
+/* Tabs (day selection) */
+.tabs button {
+  flex: 0 0 auto;
+  min-width: 110px;   /* increased from 90px */
+  padding: 14px;      /* more breathing space */
+  border: none;
+  border-radius: 10px; /* slightly rounder */
+  background: var(--card-background);
+  color: var(--menu-color);
+  font-size: 1.05rem; /* a touch larger */
+  font-weight: 500;   /* medium weight for nicer look */
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.tabs button:hover {
+  background: #44475a;
+}
+
+.tabs button.active {
+  background: var(--canteen-color);
+  color: #fff;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+/* Meal cards */
+.meal {
+  margin: 15px auto;
+  padding: 18px 20px;   /* more horizontal padding */
+  border-radius: 12px;  /* slightly larger corners */
+  background: var(--card-background);
+  text-align: left;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+  color: var(--menu-color);
+
+  max-width: 800px;     /* increased from 500px */
+  width: calc(100% - 30px); /* less side gap, wider card */
+  font-size: 1.05rem;   /* base font bigger */
+  line-height: 1.5;     /* easier reading */
+  font-family: 'Fira Sans', Arial, sans-serif;
+  font-weight: 400;
+}
+
+/* Meal headings inside cards */
+.meal span {
+  display: block;
+  font-weight: 600;        /* semi-bold for clarity */
+  margin-bottom: 8px;
+  color: var(--canteen-color);
+  font-size: 1.2rem;       /* larger than text */
+  letter-spacing: 0.5px;   /* nice spacing */
+}
+
+
+/* Swipe view (optional mobile UX) */
+.swipe-view {
+  display: grid;
+  grid-template-columns: repeat(7, 100%);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.swipe-view::-webkit-scrollbar {
+  display: none;
+}
+
+section {
+  width: 100vw;
+  scroll-snap-align: start;
+}
+
+/* Footer */
+footer {
+  color: var(--footer-color);
+  font-size: small;
+  margin-top: 20px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: var(--main-background-color);
+  padding: 10px 0;
+  text-align: center;
+  z-index: 10;
+}
+
+footer a {
+  color: var(--footer-color);
+  text-decoration: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .tabs button {
+    font-size: 0.9rem;
+    padding: 10px;
+    min-width: 70px;
+  }
+
+  .meal {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
